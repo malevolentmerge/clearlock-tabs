@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "ClearLock Tabs",
+  "version": "1.0",
+  "description": "Lock specific domains with a PIN. Clear your session cookies if you forget it.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "webNavigation",
+    "cookies"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

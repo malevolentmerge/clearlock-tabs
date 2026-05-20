@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Secured Session</title>
+  <style>
+    :root {
+      /* Light Mode Palette */
+      --bg-color: #f9fafb;
+      --card-bg: #ffffff;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      --border-focus: #111827;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        /* Dark Mode Palette */
+        --bg-color: #0f0f11;
+        --card-bg: #17171a;
+        --text-main: #f3f4f6;
+        --text-muted: #9ca3af;
+        --border-color: #374151;
+        --border-focus: #f3f4f6;
+        --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--bg-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-main);
+    }
+
+    .container {
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      text-align: center;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .icon {
+      margin: 0 auto 20px auto;
+      width: 48px;
+      height: 48px;
+      color: var(--text-main);
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0 0 32px 0;
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .domain-highlight {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* The Secret Input Trick */
+    .pin-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    /* This handles the actual keyboard typing but remains invisible */
+    #hiddenPin {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: text;
+      z-index: 10;
+    }
+
+    /* These are the visual blocks the user sees */
+    .pin-block {
+      width: 48px;
+      height: 56px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--bg-color);
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .pin-block.active {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
+    }
+
+    .error-shake {
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+      color: #ef4444 !important;
+      border-color: #ef4444 !important;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-1px, 0, 0); }
+      20%, 80% { transform: translate3d(2px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
+    }
+
+    .footer-link {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: color 0.2s ease;
+      padding: 0;
+    }
+
+    .footer-link:hover {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Clean Minimalist Lock SVG -->
+    <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+    </svg>
+
+    <h1>Session Locked</h1>
+    <p>Access to <span class="domain-highlight" id="domainName">this site</span> requires a PIN.</p>
+
+    <div class="pin-container">
+      <input type="tel" id="hiddenPin" maxlength="4" autocomplete="off" autofocus>
+      <div class="pin-block active" id="block-0"></div>
+      <div class="pin-block" id="block-1"></div>
+      <div class="pin-block" id="block-2"></div>
+      <div class="pin-block" id="block-3"></div>
+    </div>
+
+    <button class="footer-link" id="clearBtn">Forgot PIN? Erase session footprint.</button>
+  </div>
+
+  <script src="lock.js"></script>
+</body>
+</html>
