@@ -25,8 +25,7 @@ hiddenPin.addEventListener('input', (e) => {
 
   // Update text and active states
   blocks.forEach((block, index) => {
-    // Show a dot instead of the actual number for privacy, or show the number briefly. 
-    // We'll use a standard bullet character for a clean look.
+    // Show a dot instead of the actual number for privacy
     block.innerText = val[index] ? '•' : '';
     
     // Move the active border highlight to the current typing position
@@ -51,8 +50,8 @@ function verifyPin(enteredPin) {
     const correctPin = data.lockedDomains[domain];
 
     if (enteredPin === correctPin) {
-      // Success: Notify background script and redirect
-      chrome.runtime.sendMessage({ action: "allowTab" }, () => {
+      // Success: Notify background script to whitelist this DOMAIN for the session
+      chrome.runtime.sendMessage({ action: "allowDomain", domain: domain }, () => {
         window.location.href = targetUrl;
       });
     } else {
@@ -60,7 +59,7 @@ function verifyPin(enteredPin) {
       blocks.forEach(block => block.classList.add('error-shake'));
       setTimeout(() => {
         hiddenPin.value = '';
-        blocks.forEach((block, index) => {
+        blocks.forEach((block) => {
           block.innerText = '';
           block.classList.remove('active', 'error-shake');
         });
